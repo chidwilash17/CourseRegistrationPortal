@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block welcome_section %} {% endblock %}
+{% block content %}
+<h2>{{ test.title }}</h2>
+
+<div class="camera-feed">
+    <img id="camera-feed" src="{% url 'video_feed' %}" alt="Camera Feed">
+</div>
+<form method="post" action="{% url 'submit_test' course.id %}" class="test-form" id="test-form">
+    {% csrf_token %}
+    {% for question in questions %}
+        <div class="question">
+            <p class="question-text">{{ question.text }}</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="question_{{ question.id }}" value="option1">
+                    <span>{{ question.option1 }}</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="question_{{ question.id }}" value="option2">
+                    <span>{{ question.option2 }}</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="question_{{ question.id }}" value="option3">
+                    <span>{{ question.option3 }}</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="question_{{ question.id }}" value="option4">
+                    <span>{{ question.option4 }}</span>
+                </label>
+            </div>
+        </div>
+    {% endfor %}
+    <button type="submit" class="submit-button">Submit</button>
+</form>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* General Styles */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        font-size: 2rem;
+        color: #007bff;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    /* Camera Feed */
+    .camera-feed {
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    #camera-feed {
+        width: 320px;
+        height: 240px;
+        border: 2px solid #007bff;
+        border-radius: 8px;
+    }
+
+    /* Test Form */
+    .test-form {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 1.5rem;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Question Styles */
+    .question {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .question-text {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    /* Option Styles */
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .option:hover {
+        background-color: #f1f1f1;
+        border-color: #007bff;
+    }
+
+    .option input[type="radio"] {
+        margin: 0;
+    }
+
+    .option span {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    /* Submit Button */
+    .submit-button {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #218838;
+    }
+</style>
+{% endblock %}

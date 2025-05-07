@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certificate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .download-button {
+            background-color: #007bff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+
+        .dashboard-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .dashboard-link:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Certificate Container -->
+    <div class="container">
+        <h1>Congratulations!</h1>
+        <p>You have successfully passed the test for the course: <strong>{{ course.name }}</strong></p>
+        
+        {% if certificate %}
+            <a href="{% url 'download_certificate' certificate.id %}" class="download-button">Download Certificate</a>
+        {% else %}
+            <p>No certificate available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Dashboard Link Container -->
+    <div class="container">
+        <a href="{% url 'dashboard' %}" class="dashboard-link">Go to Dashboard</a>
+    </div>
+</body>
+</html>

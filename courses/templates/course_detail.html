@@ -1,0 +1,388 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block welcome_section %} {% endblock %}
+{% block content %}
+<link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet">
+<script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+<h2>{{ course.name }}</h2>
+<p>{{ course.description }}</p>
+
+<!-- Course Rating -->
+<div class="course-rating">
+    <span class="rating-stars">
+        {% for i in "12345" %}
+            {% if i|add:0 <= course.average_rating %}
+                <i class="fas fa-star"></i>
+            {% else %}
+                <i class="far fa-star"></i>
+            {% endif %}
+        {% endfor %}
+    </span>
+    <span class="rating-count">({{ course.rating_count }} ratings)</span>
+</div>
+
+<!-- Videos Section -->
+<h3>Videos</h3>
+<ul class="video-list">
+    {% for video in videos %}
+    <!-- Updated Video Element -->
+<video class="styled-video" width="100%" height="auto" controls>
+    <source src="{{ video.video_file.url }}" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
+        
+                
+            </div>
+        
+        </div>
+            </div>
+            <div class="video-details">
+                <h4>{{ video.title }}</h4>
+                <p>Duration: {{ video.duration }} minutes</p>
+                <p>Progress: <span class="progress-bar" data-video-id="{{ video.id }}"></span></p>
+                <a href="{{ video.video_file.url }}" download class="download-button">Download Video</a>
+            </div>
+            <div class="video-comments">
+                <h5>Comments</h5>
+                <ul>
+                    {% for comment in video.comments.all %}
+                        <li>
+                            <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                        </li>
+                    {% empty %}
+                        <li>No comments yet.</li>
+                    {% endfor %}
+                </ul>
+                <form method="post" action="{% url 'add_comment' video.id %}">
+                    {% csrf_token %}
+                    <textarea name="comment" placeholder="Add a comment..." required></textarea>
+                    <button type="submit">Post Comment</button>
+                </form>
+            </div>
+        </li>
+    {% empty %}
+        <li>No videos available.</li>
+    {% endfor %}
+</ul>
+
+<!-- Related Courses -->
+<h3>Related Courses</h3>
+<ul class="related-courses">
+    {% for related_course in related_courses %}
+        <li>
+            <a href="{% url 'view_course' related_course.id %}">{{ related_course.name }}</a>
+        </li>
+    {% empty %}
+        <li>No related courses found.</li>
+    {% endfor %}
+</ul>
+
+<!-- Staff Actions -->
+{% if request.user.is_staff %}
+    <a href="{% url 'upload_video' course.id %}" class="upload-button">Upload Video</a>
+{% endif %}
+
+<!-- Take Test Button -->
+<a href="{% url 'take_test' course.id %}" class="test-button">Take Test</a>
+
+<!-- Social Sharing -->
+<div class="social-sharing">
+    <p>Share this course:</p>
+    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text=Check out this course: {{ course.name }}" target="_blank">
+        <i class="fab fa-twitter"></i>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank">
+        <i class="fab fa-facebook"></i>
+    </a>
+    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ course.name }}" target="_blank">
+        <i class="fab fa-linkedin"></i>
+    </a>
+</div>
+
+<!-- Dark Mode Toggle -->
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <i class="fas fa-moon"></i> Toggle Dark Mode
+</button>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* General Styles */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+    /* Styled Video */
+.styled-video {
+    max-width: 80%; /* Ensures responsiveness */
+    border-radius: 10px; /* Adds rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+    margin-bottom: 15px; /* Spacing between videos */
+    background-color: #000; /* Background for controls bar */
+    outline: none; /* Removes default video border */
+}
+
+.styled-video:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Slightly stronger shadow on hover */
+}
+
+
+    body.dark-mode {
+        background-color: #1a1a1a;
+        color: #f4f4f9;
+    }
+
+    h2 {
+        font-size: 2rem;
+        color: #007bff;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        font-size: 1rem;
+        color: #666;
+    }
+
+    /* Course Rating */
+    .course-rating {
+        margin-bottom: 1.5rem;
+    }
+
+    .rating-stars {
+        color: #ffc107;
+    }
+
+    .rating-count {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    /* Videos Section */
+    .video-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .video-item {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .video-thumbnail {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .video-thumbnail img {
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+    }
+
+    .play-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .play-button:hover {
+        background-color: #0056b3;
+    }
+
+    .video-details {
+        margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+        display: inline-block;
+        width: 100px;
+        height: 10px;
+        background-color: #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .progress-bar::after {
+        content: '';
+        display: block;
+        width: 50%; /* Example progress */
+        height: 100%;
+        background-color: #28a745;
+    }
+
+    .download-button {
+        background-color: #28a745;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .download-button:hover {
+        background-color: #218838;
+    }
+
+    .video-comments {
+        margin-top: 1rem;
+    }
+
+    .video-comments ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .video-comments li {
+        margin-bottom: 0.5rem;
+    }
+
+    .video-comments textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 0.5rem;
+    }
+
+    .video-comments button {
+        background-color: #007bff;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .video-comments button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Related Courses */
+    .related-courses {
+        list-style: none;
+        padding: 0;
+    }
+
+    .related-courses li {
+        margin-bottom: 0.5rem;
+    }
+
+    .related-courses a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .related-courses a:hover {
+        text-decoration: underline;
+    }
+
+    /* Staff Actions */
+    .upload-button {
+        background-color: #007bff;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .upload-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Take Test Button */
+    .test-button {
+        background-color: #28a745;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .test-button:hover {
+        background-color: #218838;
+    }
+
+    /* Social Sharing */
+    .social-sharing {
+        margin-top: 1.5rem;
+    }
+
+    .social-sharing a {
+        color: #007bff;
+        margin-right: 1rem;
+        font-size: 1.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .social-sharing a:hover {
+        color: #0056b3;
+    }
+
+    /* Dark Mode Toggle */
+    .dark-mode-toggle {
+        background-color: #333;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .dark-mode-toggle:hover {
+        background-color: #555;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function playVideo(videoUrl) {
+        const videoPlayer = document.createElement('video');
+        videoPlayer.src = videoUrl;
+        videoPlayer.controls = true;
+        videoPlayer.style.width = '100%';
+        videoPlayer.style.height = 'auto';
+        document.querySelector('.video-thumbnail').replaceWith(videoPlayer);
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    }
+
+    // Load dark mode preference
+    if (localStorage.getItem('dark-mode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+    }
+</script>
+{% endblock %}

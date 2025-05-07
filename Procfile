@@ -1,0 +1,1 @@
+web gunicorn CourseRegistrationPorta:wsgi:apllication --log-file -

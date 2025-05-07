@@ -1,0 +1,149 @@
+/* Reset */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 500px;
+    background-color: black;
+    font-family: 'Calibri', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(165, 255, 172);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+    width: 420px;
+    z-index: 1;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    padding: 20px 20px 5px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.7);
+}
+
+.form-title {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.field {
+    color:#075ec9;
+    position: relative;
+    margin-top: 25px;
+}
+
+.field .bi {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    color: #075ec9;
+}
+
+.toggle-pass {
+    cursor: pointer;
+}
+
+.inp {
+    width: 100%;
+    color: rgb(28, 190, 249);
+    font-size: 16px;
+    outline: none;
+    padding: 0 25px 5px 0;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: transparent;
+}
+
+.label {
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+    z-index: -1;
+  
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out, font-size 0.3s ease-in-out;
+    color: #075ec9;
+}
+
+.inp:focus~.label,
+.inp:not(:placeholder-shown)~.label {
+    transform: translateY(-25px);
+    font-size: 15px;
+    color: #c3c3c3;
+}
+
+/* Submit Button */
+#register-btn {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 100%;
+    color: white;
+    border-radius: 5px;
+    margin-top: 40px;
+    font-size: 18px;
+    padding: 10px 0;
+    border: none;
+}
+
+#register-btn:hover {
+    opacity: 0.8;
+}
+
+/* Separator */
+.separator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    background: rgba(255, 255, 255, 0.3);
+    width: 40%;
+    height: 1px;
+}
+
+/* Alternative Buttons */
+.alternative {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.alternative button {
+    border: none;
+    font-size: 14px;
+    height: 40px;
+    width: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.2);
+    color: #f0f0f0;
+}
+
+.alternative button:hover {
+    opacity: 0.8;
+}
+
+/* Bottom Text */
+.bottom {
+    margin-top: 35px;
+    font-size: 15px;
+}

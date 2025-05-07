@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% block welcome_section %} {% endblock %}
+{% block content %}
+<h2>Course Search</h2>
+
+<!-- Display the selected semester -->
+{% if semester %}
+    <p class="semester-info">Showing courses for <strong>{{ semester }}</strong> semester.</p>
+{% else %}
+    <p class="semester-info">Showing all courses.</p>
+{% endif %}
+
+<!-- Search Form -->
+<form class="search-bar" action="{% url 'course_search' %}" method="get">
+    <input type="text" name="query" placeholder="Search courses..." value="{{ query }}">
+    <button type="submit"><i class="fas fa-search"></i></button>
+</form>
+
+<!-- Search Results -->
+{% if query %}
+    <h3 class="search-results-heading">Search Results for "{{ query }}"</h3>
+{% endif %}
+
+<ul class="course-list">
+    {% for course in courses %}
+        <li class="course-item">
+            <div class="course-info">
+                <span class="course-name">{{ course.name }} ({{ course.code }})</span>
+                <span class="course-description">{{ course.description }}</span>
+            </div>
+            <a href="{% url 'register_course' course.id %}" class="register-button">Register</a>
+        </li>
+    {% empty %}
+        <li class="no-courses">No courses found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* General Styles */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        font-size: 2rem;
+        color: #007bff;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .semester-info {
+        font-size: 1.1rem;
+        color: #555;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Search Bar */
+    .search-bar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .search-bar input {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 5px 0 0 5px;
+        width: 300px;
+        font-size: 1rem;
+        outline: none;
+    }
+
+    .search-bar button {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .search-bar button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Search Results Heading */
+    .search-results-heading {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    /* Course List */
+    .course-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 auto;
+        max-width: 800px;
+    }
+
+    .course-item {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .course-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-info {
+        flex: 1;
+    }
+
+    .course-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 0.5rem;
+    }
+
+    .course-description {
+        font-size: 1rem;
+        color: #666;
+    }
+
+    /* Register Button */
+    .register-button {
+        background-color: #28a745;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .register-button:hover {
+        background-color: #218838;
+    }
+
+    /* No Courses Found */
+    .no-courses {
+        font-size: 1.2rem;
+        color: #777;
+        text-align: center;
+        padding: 2rem;
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+        margin: 2rem auto;
+        max-width: 800px;
+    }
+</style>
+{% endblock %}

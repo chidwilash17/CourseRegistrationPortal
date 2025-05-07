@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Your Dashboard</h2>
+<ul class="course-list">
+    {% for reg in registrations %}
+        <li class="course-item">
+            <div class="course-info">
+                {% if reg.course.name == "java" %}
+                <img src="/static/images/java.jpeg" alt="Python Programming Thumbnail" class="course-thumbnail">
+                {% else %}
+                <img src="/static/images/python.jpeg" alt="Python Programming Thumbnail" class="course-thumbnail"><br>{% endif %}
+                <span class="course-name">{{ reg.course.name }}</span>
+                <span class="course-description">{{ reg.course.description }}</span>
+            </div>
+            <div class="course-actions">
+                <a href="{% url 'course_detail' reg.course.id %}" class="view-course-button">View Course</a>
+                {% if reg.status == 'registered' %}
+                    <a href="{% url 'unregister_course' reg.id %}" class="unregister-button">Unregister</a>
+                {% endif %}
+            </div>
+        </li>
+    {% empty %}
+        <li class="no-courses">No courses registered.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    /* General Styles */
+   /* General Styles */
+h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+/* Course List Styles */
+.course-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.course-item {
+    background-color: #2cd26e;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.course-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* Course Info Container */
+.course-info {
+    display: flex; /* Flexbox for horizontal alignment */
+    align-items: center; /* Vertically center items */
+    gap: 15px; /* Space between thumbnail and text */
+}
+
+/* Thumbnail Styles */
+.course-thumbnail {
+    max-width: 100px;
+    max-height: 70px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+/* Course Text Container */
+.course-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically center text */
+}
+
+/* Course Name Styles */
+.course-name {
+    font-size: 1.8rem;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 0.5rem; /* Space between name and description */
+}
+
+/* Course Description Styles */
+.course-description {
+    font-size: 1rem;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Course Actions Styles */
+.course-actions {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+/* Button Styles */
+.view-course-button, .unregister-button {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.view-course-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.view-course-button:hover {
+    background-color: #0056b3;
+}
+
+.unregister-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.unregister-button:hover {
+    background-color: #c82333;
+}
+
+/* No Courses Message */
+.no-courses {
+    font-size: 1.2rem;
+    color: #777;
+    text-align: center;
+    padding: 2rem;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+}
+
+</style>
+{% endblock %}
